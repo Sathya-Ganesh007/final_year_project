@@ -172,7 +172,7 @@ export async function POST(request: Request) {
         status: "mock-success",
         message:
           "SCRAPER_API_BASE_URL is not set, so this is mock data from /api/crawler.",
-        pagesCrawled: body.mode === "full" ? 3 : 1,
+        pagesCrawled: body.mode === "multipage" ? 3 : 1,
         example: {
           title: "Example page title",
           description: "Example description for the crawled page.",
@@ -222,8 +222,8 @@ export async function POST(request: Request) {
     // Prepare request body with fallback values
     const scrapeData = {
       url: body.url,
-      mode: body.mode || "single", // "single" or "full"
-      maxPages: body.maxPages || (body.mode === "full" ? 100 : 1),
+      mode: body.mode || "single", // "single" or "multipage"
+      maxPages: body.maxPages || (body.mode === "multipage" ? 100 : 1),
       extractImagesFlag:
         body.extractImagesFlag !== undefined ? body.extractImagesFlag : true,
       extractLinksFlag:
@@ -361,4 +361,62 @@ export async function POST(request: Request) {
     );
   }
 }
+export async function GET(request: Request) {
+  try {
+    if (!supabaseAdmin) {
+      return new Response(JSON.stringify([]), { status: 200 });
+    }
 
+    const { searchParams } = new URL(request.url);
+    const stats = searchParams.get("stats") === "true";
+
+    if (stats) {
+      // Fetch total count and latest 3 for progress card
+      const { count, error: countError } = await supabaseAdmin
+        .from("scraped_pages")
+        .select("*", { count: "exact", head: true });
+
+      const { data: latest, error: latestError } = await supabaseAdmin
+        .from("scraped_pages")
+        .select("url, created_at, mode")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (countError || latestError) throw countError || latestError;
+
+      // Calculate a mock risk score based on counts for high-fidelity look
+      const baseRisk = 75;
+      const totalCount = count || 0;
+      const riskScore = Math.min(450, baseRisk + (totalCount * 5));
+
+      return new Response(JSON.stringify({
+        totalCount,
+        riskScore,
+        latestTasks: latest || [],
+        completionRate: 100 // Mock for now until we have real status
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from("scraped_pages")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    if (error) throw error;
+
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error: any) {
+    console.error("❌ Failed to fetch crawl data:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
