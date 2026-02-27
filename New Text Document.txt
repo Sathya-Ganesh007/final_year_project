@@ -1,0 +1,138 @@
+{
+  "url": "https://njdesignpark.com",
+  "mode": "single",
+  "summary": {
+    "totalPages": 1,
+    "totalLinks": 27,
+    "totalImages": 27,
+    "totalMetaTags": 16,
+    "totalFavicons": 4,
+    "technologiesFound": 2,
+    "technologies": [
+      "CDN",
+      "Cloudflare"
+    ],
+    "favicons": [
+      {
+        "href": "https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png",
+        "sizes": "32x32",
+        "type": null,
+        "rel": "icon",
+        "fullTag": "<link rel=\"icon\" href=\"https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png\" sizes=\"32x32\" />"
+      },
+     
+    ],
+    "cmsDetected": true
+  },
+  "pages": [
+    {
+      "url": "https://njdesignpark.com",
+      "statusCode": 200,
+      "title": "NJ DesignPark",
+      "html": "",
+      "links": [
+        {
+          "href": "https://njdesignpark.com/#main",
+          "text": "Skip to content",
+          "isExternal": false
+        },
+       
+      ],
+      "images": [
+        {
+          "src": "https://njdesignpark.com/wp-content/uploads/Logo-W.png",
+          "fullTag": "<img width=\"300\" height=\"63\" src=\"https://njdesignpark.com/wp-content/uploads/Logo-W.png\" class=\"custom-logo\" alt=\"NJ DesignPark\" decoding=\"async\" />"
+        },
+        {
+          "src": "https://njdesignpark.com/wp-content/uploads/wd.png",
+          "fullTag": "<img alt=\"\" decoding=\"async\" src=\"https://njdesignpark.com/wp-content/uploads/wd.png\" alt=\"\" width=\"70\" height=\"70\" class=\"kt-info-box-image wp-image-2071\"/>"
+        },
+        
+      ],
+      "timestamp": "2026-02-27T07:13:59.624Z"
+    }
+  ],
+  "extractedData": {
+    "links": [
+      "https://njdesignpark.com/#main",
+     
+      "https://njdesignpark.com/our-services/"
+    ],
+    "images": [
+      
+      "https://njdesignpark.com/wp-content/uploads/Logo-White.png"
+    ],
+    "metaTags": [
+      {
+        "name": "viewport",
+        "content": "width=device-width, initial-scale=1, minimum-scale=1",
+        "fullTag": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1\">"
+      },
+      {
+        "name": "dc.title",
+        "content": "NJ DesignPark",
+        "fullTag": "<meta name=\"dc.title\" content=\"NJ DesignPark\">"
+      },
+     
+      {
+        "name": "msapplication-TileImage",
+        "content": "https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png",
+        "fullTag": "<meta name=\"msapplication-TileImage\" content=\"https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png\" />"
+      }
+    ],
+    "technologies": [
+      "CDN",
+      "Cloudflare"
+    ],
+    "favicons": [
+      {
+        "href": "https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png",
+        "sizes": "32x32",
+        "type": null,
+        "rel": "icon",
+        "fullTag": "<link rel=\"icon\" href=\"https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png\" sizes=\"32x32\" />"
+      },
+      {
+        "href": "https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png",
+        "sizes": "192x192",
+        "type": null,
+        "rel": "icon",
+        "fullTag": "<link rel=\"icon\" href=\"https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png\" sizes=\"192x192\" />"
+      },
+      {
+        "href": "https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png",
+        "sizes": null,
+        "type": null,
+        "rel": "apple-touch-icon",
+        "fullTag": "<link rel=\"apple-touch-icon\" href=\"https://njdesignpark.com/wp-content/uploads/2025/12/favicon-1.png\" />"
+      },
+      {
+        "href": "https://njdesignpark.com/favicon.ico",
+        "sizes": null,
+        "type": "image/x-icon",
+        "rel": "icon",
+        "fullTag": null,
+        "isDefault": true
+      }
+    ],
+    "cms": {
+      "type": "Shopify",
+      "version": "6.9.1",
+      "plugins": [
+        "kadence-blocks",
+        "contact-form-7",
+        "kadence-pro",
+        "kadence-blocks-pro",
+        "*"
+      ]
+    }
+  },
+  "performance": {
+    "startTime": "2026-02-27T07:13:59.628Z",
+    "endTime": "2026-02-27T07:13:59.628Z",
+    "totalTime": 1952,
+    "pagesPerSecond": 0.5122950819672131
+  },
+  "responseTime": 1953,
+  "timestamp": "2026-02-27T07:13:59.629Z"
+}
