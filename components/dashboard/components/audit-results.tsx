@@ -36,8 +36,28 @@ export function AuditResults({ data, onBack }: AuditResultsProps) {
     { id: "raw", label: "Raw JSON", icon: <IconCode size={18} /> },
   ];
 
-  const imagesRaw = data?.pages?.[0]?.images || data?.images || [];
-  const linksRaw = data?.pages?.[0]?.links || data?.links || [];
+  const isMultipage = data.mode === "multi";
+  
+  let imagesRaw: any[] = [];
+  let linksRaw: any[] = [];
+
+  if (isMultipage && Array.isArray(data.pages)) {
+    // Aggregate from all pages for site crawl
+    data.pages.forEach((page: any) => {
+      if (Array.isArray(page.images)) imagesRaw = [...imagesRaw, ...page.images];
+      if (Array.isArray(page.links)) linksRaw = [...linksRaw, ...page.links];
+    });
+    
+    // De-duplicate
+    imagesRaw = Array.from(new Set(imagesRaw.map(img => typeof img === 'string' ? img : JSON.stringify(img))))
+      .map(img => img.startsWith('{') ? JSON.parse(img) : img);
+    linksRaw = Array.from(new Set(linksRaw.map(link => typeof link === 'string' ? link : JSON.stringify(link))))
+      .map(link => link.startsWith('{') ? JSON.parse(link) : link);
+  } else {
+    // Single page mode or fallback
+    imagesRaw = data?.pages?.[0]?.images || data?.images || [];
+    linksRaw = data?.pages?.[0]?.links || data?.links || [];
+  }
   
   const images = imagesRaw.map((img: any) => typeof img === 'string' ? img : img?.src || img?.url || '').filter(Boolean);
   const links = linksRaw.map((link: any) => typeof link === 'string' ? link : link?.href || link?.url || link?.src || '').filter(Boolean);

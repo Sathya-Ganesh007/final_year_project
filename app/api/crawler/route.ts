@@ -100,6 +100,87 @@ function toNormalizedPage(
   };
 }
 
+function detectTechnologies(data: any): string[] {
+  const techs = new Set<string>();
+  
+  // Aggregate content from all pages and metadata
+  const pages = Array.isArray(data.pages) ? data.pages : [data];
+  const metaTags = data.extractedData?.metaTags || [];
+  
+  const allContent = JSON.stringify(pages).toLowerCase() + 
+                     JSON.stringify(metaTags).toLowerCase() + 
+                     JSON.stringify(data.extractedData || {}).toLowerCase();
+
+  // CMS Detection
+  if (allContent.includes('wp-content') || allContent.includes('wp-includes') || allContent.includes('wordpress')) techs.add('WordPress');
+  if (allContent.includes('shopify.com') || allContent.includes('shopify-checkout') || allContent.includes('myshopify')) techs.add('Shopify');
+  if (allContent.includes('wix.com') || allContent.includes('_wix_') || allContent.includes('wix-standard')) techs.add('Wix');
+  if (allContent.includes('squarespace.com') || allContent.includes('static1.squarespace.com')) techs.add('Squarespace');
+  if (allContent.includes('joomla')) techs.add('Joomla');
+  if (allContent.includes('drupal')) techs.add('Drupal');
+  if (allContent.includes('magento')) techs.add('Magento');
+  if (allContent.includes('ghost.org') || allContent.includes('ghost-sdk')) techs.add('Ghost');
+  if (allContent.includes('webflow')) techs.add('Webflow');
+
+  // E-commerce
+  if (allContent.includes('woocommerce')) techs.add('WooCommerce');
+  if (allContent.includes('bigcommerce')) techs.add('BigCommerce');
+  if (allContent.includes('prestashop')) techs.add('PrestaShop');
+
+  // Frontend Frameworks & Libraries
+  if (allContent.includes('_next/static') || allContent.includes('next.js')) techs.add('Next.js');
+  if (allContent.includes('react.production.min.js') || allContent.includes('react-dom') || allContent.includes('__react')) techs.add('React');
+  if (allContent.includes('vue.js') || allContent.includes('vue-router') || allContent.includes('__vue__')) techs.add('Vue.js');
+  if (allContent.includes('angular.js') || allContent.includes('ng-app') || allContent.includes('@angular')) techs.add('Angular');
+  if (allContent.includes('jquery')) techs.add('jQuery');
+  if (allContent.includes('alpine.js')) techs.add('Alpine.js');
+  if (allContent.includes('tailwind') || allContent.includes('tw-')) techs.add('Tailwind CSS');
+  if (allContent.includes('bootstrap')) techs.add('Bootstrap');
+  if (allContent.includes('remix')) techs.add('Remix');
+
+  // Analytics
+  if (allContent.includes('google-analytics') || allContent.includes('gtag.js') || allContent.includes('ga.js')) techs.add('Google Analytics');
+  if (allContent.includes('googletagmanager.com/gtm.js')) techs.add('Google Tag Manager');
+  if (allContent.includes('facebook.com/tr') || allContent.includes('fbevents.js')) techs.add('Facebook Pixel');
+  if (allContent.includes('hotjar')) techs.add('Hotjar');
+  if (allContent.includes('clarity.ms')) techs.add('Microsoft Clarity');
+
+  // Infrastructure & CDN
+  if (allContent.includes('cloudflare')) techs.add('Cloudflare');
+  if (allContent.includes('vercel')) techs.add('Vercel');
+  if (allContent.includes('netlify')) techs.add('Netlify');
+  if (allContent.includes('s3.amazonaws.com')) techs.add('AWS S3');
+  if (allContent.includes('fastly')) techs.add('Fastly');
+
+  // Fonts & Icons
+  if (allContent.includes('fonts.googleapis.com')) techs.add('Google Fonts');
+  if (allContent.includes('use.typekit.net')) techs.add('Adobe Fonts');
+  if (allContent.includes('fontawesome')) techs.add('Font Awesome');
+  
+  // Specific Meta Tag checks
+  metaTags.forEach((tag: any) => {
+    const name = (tag.name || tag.property || '').toLowerCase();
+    const content = (tag.content || '').toLowerCase();
+    
+    if (name === 'generator') {
+      if (content.includes('wordpress')) techs.add('WordPress');
+      if (content.includes('shopify')) techs.add('Shopify');
+      if (content.includes('wix')) techs.add('Wix');
+      if (content.includes('webflow')) techs.add('Webflow');
+      if (content.includes('elementor')) techs.add('Elementor');
+    }
+  });
+
+  // Preserve existing tech if they seem real and not just "CDN"
+  if (Array.isArray(data.summary?.technologies)) {
+    data.summary.technologies.forEach((t: string) => {
+      if (t !== "CDN" && t.length > 2) techs.add(t);
+    });
+  }
+
+  return Array.from(techs);
+}
+
 async function saveScrapeResult(
   body: any,
   data: any,
@@ -122,6 +203,10 @@ async function saveScrapeResult(
   } else {
     pages = [toNormalizedPage(data, body.url, mode, data)];
   }
+
+  // Ensure summary exists and has real technologies
+  if (!data.summary) data.summary = {};
+  data.summary.technologies = detectTechnologies(data);
 
   const { data: inserted, error } = await supabaseAdmin
     .from("scraped_pages")
@@ -172,7 +257,7 @@ export async function POST(request: Request) {
         status: "mock-success",
         message:
           "SCRAPER_API_BASE_URL is not set, so this is mock data from /api/crawler.",
-        pagesCrawled: body.mode === "multipage" ? 3 : 1,
+        pagesCrawled: body.mode === "multi" ? 3 : 1,
         example: {
           title: "Example page title",
           description: "Example description for the crawled page.",
@@ -223,7 +308,7 @@ export async function POST(request: Request) {
     const scrapeData = {
       url: body.url,
       mode: body.mode || "single", // "single" or "multipage"
-      maxPages: body.maxPages || (body.mode === "multipage" ? 100 : 1),
+      maxPages: body.maxPages || (body.mode === "multi" ? 500 : 1),
       extractImagesFlag:
         body.extractImagesFlag !== undefined ? body.extractImagesFlag : true,
       extractLinksFlag:

@@ -97,10 +97,10 @@ export function NewAuditModal({ isOpen, onClose, onStartAudit, isLoading }: NewA
                     </button>
                     <button
                       type="button"
-                      onClick={() => setMode("multipage")}
+                      onClick={() => setMode("multi")}
                       className={cn(
                         "flex flex-col items-center justify-center p-6 rounded-[1.5rem] border-2 transition-all gap-3",
-                        mode === "multipage" 
+                        mode === "multi" 
                           ? "bg-blue-50 border-blue-600/20 text-blue-600" 
                           : "bg-white border-neutral-100 text-neutral-400 hover:border-neutral-200"
                       )}
@@ -133,7 +133,7 @@ export function NewAuditModal({ isOpen, onClose, onStartAudit, isLoading }: NewA
                     )}
                   </button>
                   <p className="text-center text-[10px] font-black text-neutral-300 uppercase tracking-[0.2em]">
-                    Advanced AI-Powered Security & SEO Analysis
+                    Advanced Security & SEO Analysis
                   </p>
                 </div>
               </form>
