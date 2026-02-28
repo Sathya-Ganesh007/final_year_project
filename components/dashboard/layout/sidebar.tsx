@@ -12,7 +12,8 @@ import {
   IconChevronDown,
   IconAlertTriangle,
   IconTimeline,
-  IconX
+  IconX,
+  IconCode
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -33,6 +34,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         { label: "Overview", href: "/dashboard", icon: <IconLayoutDashboard size={20} /> },
         { label: "Recent Crawls", href: "/dashboard/crawls", icon: <IconTimeline size={20} /> },
         { label: "Risk Issues", href: "/dashboard/issues", icon: <IconAlertTriangle size={20} />, badge: 12 },
+        { label: "Advanced Data", href: "/dashboard/advanced", icon: <IconCode size={20} /> },
       ]
     },
     {

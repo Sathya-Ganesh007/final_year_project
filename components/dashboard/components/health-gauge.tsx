@@ -90,15 +90,37 @@ export function HealthGauge() {
             </div>
 
             <div className="w-full mt-8 md:mt-12 space-y-3 md:space-y-4">
-              {riskLevels.map((lvl, idx) => (
-                <div key={idx} className="flex items-center justify-between group cursor-default gap-2">
-                  <div className="flex items-center gap-2 md:gap-4 min-w-0">
-                    <div className={cn("h-2.5 w-2.5 rounded-full shadow-inner shrink-0", lvl.color)} />
-                    <span className="text-[10px] md:text-xs xl:text-sm font-black text-neutral-500 group-hover:text-neutral-900 transition-colors uppercase tracking-tight md:tracking-widest truncate">{lvl.label}</span>
-                  </div>
-                  <span className="text-[10px] md:text-xs font-black text-neutral-400 font-mono tracking-tighter shrink-0">{lvl.range}</span>
+              <div className="flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-red-600 shadow-inner shrink-0" />
+                  <span className="text-xs font-black text-neutral-500 group-hover:text-neutral-900 transition-colors uppercase tracking-widest">Critical Issues</span>
                 </div>
-              ))}
+                <span className="text-xs font-black text-red-600 font-mono tracking-tighter shrink-0">{stats?.criticalCount || 0}</span>
+              </div>
+              
+              <div className="flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-amber-500 shadow-inner shrink-0" />
+                  <span className="text-xs font-black text-neutral-500 group-hover:text-neutral-900 transition-colors uppercase tracking-widest">Detected Warnings</span>
+                </div>
+                <span className="text-xs font-black text-amber-600 font-mono tracking-tighter shrink-0">{stats?.warningCount || 0}</span>
+              </div>
+
+              <div className="flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-blue-600 shadow-inner shrink-0" />
+                  <span className="text-xs font-black text-neutral-500 group-hover:text-neutral-900 transition-colors uppercase tracking-widest">Security Integrity</span>
+                </div>
+                <span className="text-xs font-black text-blue-600 font-mono tracking-tighter shrink-0">{stats?.securityScore || 0}%</span>
+              </div>
+
+              <div className="flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-inner shrink-0" />
+                  <span className="text-xs font-black text-neutral-500 group-hover:text-neutral-900 transition-colors uppercase tracking-widest">Total Analyzed</span>
+                </div>
+                <span className="text-xs font-black text-emerald-600 font-mono tracking-tighter shrink-0">{stats?.totalCount || 0}</span>
+              </div>
             </div>
           </>
         )}

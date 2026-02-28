@@ -12,10 +12,11 @@ import {
   IconSearch,
   IconClipboard,
   IconChevronLeft,
-  IconChevronRight
+  IconChevronRight,
+  IconX
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface AuditResultsProps {
@@ -27,13 +28,13 @@ export function AuditResults({ data, onBack }: AuditResultsProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const itemsPerPage = activeTab === "images" ? 12 : 10;
 
   const tabs = [
     { id: "overview", label: "Overview", icon: <IconLayoutGrid size={18} /> },
     { id: "images", label: "Images", icon: <IconPhoto size={18} /> },
     { id: "links", label: "Links", icon: <IconLink size={18} /> },
-    { id: "raw", label: "Raw JSON", icon: <IconCode size={18} /> },
   ];
 
   const isMultipage = data.mode === "multi";
@@ -223,18 +224,25 @@ export function AuditResults({ data, onBack }: AuditResultsProps) {
               <div className="space-y-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {paginatedItems.map((img: string, idx: number) => (
-                    <div key={idx} className="group relative bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-100 aspect-square flex flex-col items-center justify-center p-4">
+                    <div 
+                      key={idx} 
+                      className="group relative bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-100 aspect-square flex flex-col items-center justify-center p-4 cursor-pointer"
+                      onClick={() => setSelectedImage(img)}
+                    >
                       <img 
                         src={img} 
                         alt={`Audit asset ${idx}`}
-                        className="max-h-full max-w-full object-contain drop-shadow-sm group-hover:scale-110 transition-transform duration-500"
+                        className="max-h-full max-w-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-500"
                         onError={(e: any) => e.target.style.display = 'none'}
                       />
                       <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                         <p className="text-[9px] text-white font-bold truncate mb-2">{img}</p>
                         <div className="flex gap-2">
                           <button 
-                            onClick={() => navigator.clipboard.writeText(img)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText(img);
+                            }}
                             className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white py-2 rounded-xl text-[9px] font-black uppercase tracking-tighter"
                           >
                             Copy URL
@@ -242,6 +250,7 @@ export function AuditResults({ data, onBack }: AuditResultsProps) {
                           <a 
                             href={img} 
                             target="_blank" 
+                            onClick={(e) => e.stopPropagation()}
                             className="px-3 bg-blue-600 text-white py-2 rounded-xl flex items-center justify-center"
                           >
                             <IconExternalLink size={14} />
@@ -300,24 +309,62 @@ export function AuditResults({ data, onBack }: AuditResultsProps) {
               </div>
             )}
 
-            {activeTab === "raw" && (
-              <div className="bg-neutral-900 rounded-[1.5rem] p-8 overflow-hidden relative group">
-                <button 
-                  onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
-                  className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all backdrop-blur-md"
-                >
-                  Copy JSON
-                </button>
-                <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
-                  <pre className="text-xs font-mono text-blue-400 leading-relaxed">
-                    {JSON.stringify(data, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            )}
           </div>
         </CardContent>
       </Card>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedImage(null)}
+              className="absolute inset-0 bg-neutral-900/90 backdrop-blur-sm cursor-zoom-out"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative max-w-6xl w-full flex flex-col items-center gap-6"
+            >
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-12 right-0 md:-right-12 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-2xl shadow-xl transition-all active:scale-95 group z-[110]"
+              >
+                <IconX size={24} stroke={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              </button>
+
+              <div className="relative bg-white p-2 rounded-[2rem] shadow-2xl overflow-hidden">
+                <img 
+                  src={selectedImage} 
+                  alt="Full preview"
+                  className="max-h-[70vh] w-auto object-contain rounded-2xl md:rounded-[1.5rem]"
+                />
+              </div>
+              
+              <div className="flex gap-4 p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl w-fit">
+                <button 
+                  onClick={() => navigator.clipboard.writeText(selectedImage)}
+                  className="px-6 py-3 bg-white text-neutral-900 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-neutral-100 transition-all active:scale-95 flex items-center gap-3"
+                >
+                  <IconClipboard size={18} />
+                  Copy URL
+                </button>
+                <a 
+                  href={selectedImage} 
+                  target="_blank" 
+                  className="px-6 py-3 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all active:scale-95 flex items-center gap-3 shadow-lg shadow-blue-500/20"
+                >
+                  <IconExternalLink size={18} />
+                  Open Original
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

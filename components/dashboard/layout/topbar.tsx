@@ -2,9 +2,7 @@
 
 import React from "react";
 import { 
-  IconSearch, 
   IconBell, 
-  IconSettings,
   IconMenu2
 } from "@tabler/icons-react";
 
@@ -13,8 +11,9 @@ interface TopbarProps {
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
+
   return (
-    <header className="h-16 md:h-20 border-b border-neutral-100 bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-30 w-full gap-4">
+    <header className="h-16 md:h-24 border-b border-neutral-100 bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-30 w-full gap-4 md:gap-8 transition-all">
       <div className="flex items-center gap-4 flex-1">
         <button 
           onClick={onMenuClick}
@@ -22,21 +21,15 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         >
           <IconMenu2 size={24} />
         </button>
-        
-        <div className="max-w-md w-full relative">
-          <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="w-full bg-neutral-50/50 border border-neutral-100 rounded-xl py-2 md:py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-blue-500/5 transition-all focus:bg-white"
-          />
-        </div>
       </div>
 
-      <div className="flex items-center gap-3 md:gap-6">
+      <div className="flex items-center gap-3 md:gap-6 shrink-0">
         <div className="relative cursor-pointer group p-2">
-          <div className="absolute top-1.5 right-1.5 h-2.5 w-2.5 bg-red-500 border-2 border-white rounded-full transition-transform group-hover:scale-110" />
-          <IconBell className="text-neutral-500 group-hover:text-neutral-900 transition-colors" size={22} />
+          <div className="absolute top-1.5 right-1.5 h-2 w-2 bg-red-500 border-2 border-white rounded-full transition-transform group-hover:scale-110" />
+          <IconBell className="text-neutral-400 group-hover:text-neutral-900 transition-colors" size={20} />
+        </div>
+        <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-neutral-900 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow-sm ring-1 ring-neutral-100 cursor-pointer hover:scale-105 transition-all">
+          GA
         </div>
       </div>
     </header>

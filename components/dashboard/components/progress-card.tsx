@@ -77,43 +77,16 @@ export function ProgressCard() {
               </div>
             </div>
 
-            <div className="overflow-x-auto -mx-6 md:mx-0">
-              <table className="w-full min-w-[500px] md:min-w-0">
-                <thead>
-                  <tr className="border-y border-neutral-50/50 bg-neutral-50/30">
-                    <th className="py-3 px-6 text-left text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Crawl Target</th>
-                    <th className="hidden sm:table-cell py-3 px-6 text-left text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Mode</th>
-                    <th className="py-3 px-6 text-left text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Status</th>
-                    <th className="py-3 px-6 text-right text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-50">
-                  {recentTasks.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="py-10 text-center text-[10px] font-black text-neutral-300 uppercase tracking-[0.2em]">No recent activity</td>
-                    </tr>
-                  ) : (
-                    recentTasks.map((task: any, idx: number) => (
-                      <tr key={idx} className="group hover:bg-neutral-50/20 transition-all">
-                        <td className="py-4 md:py-6 px-6 text-sm md:text-base font-black text-neutral-900">
-                          <div className="truncate max-w-[200px]">{task.url}</div>
-                        </td>
-                        <td className="hidden sm:table-cell py-4 md:py-6 px-6 text-xs md:text-sm font-bold text-neutral-500 uppercase">{task.mode}</td>
-                        <td className="py-4 md:py-6 px-6">
-                          <span className="bg-emerald-50 text-emerald-600 text-[9px] md:text-[10px] font-black px-2 md:px-3 py-1 rounded-xl border border-emerald-200/30 uppercase tracking-widest whitespace-nowrap">
-                            Healthy
-                          </span>
-                        </td>
-                        <td className="py-4 md:py-6 px-6 text-right">
-                          <button className="px-3 md:px-5 py-1.5 md:py-2 rounded-2xl border-2 border-neutral-100 text-neutral-600 text-[10px] md:text-[11px] font-black uppercase tracking-widest hover:bg-neutral-50 hover:border-neutral-200 transition-all active:scale-95 whitespace-nowrap">
-                            Reports
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+            <div className="pt-4 border-t border-neutral-50/50">
+              <div className="flex items-center gap-3 p-6 bg-blue-50/30 rounded-3xl border border-blue-100/30">
+                <div className="h-10 w-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                  <IconInfoCircle size={20} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-[11px] font-black text-neutral-900 uppercase tracking-widest leading-none mb-1">Active Optimization</p>
+                  <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Automatic health checks are running in the background.</p>
+                </div>
+              </div>
             </div>
           </>
         )}

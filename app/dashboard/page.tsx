@@ -7,7 +7,7 @@ import { HealthGauge } from "@/components/dashboard/components/health-gauge";
 
 export default function DashboardPage() {
   return (
-    <DashboardShell title="Strategic Overview" breadcrumb="Overview" subtitle="Active Analysis">
+    <DashboardShell title="Strategic Overview" breadcrumb="Overview" subtitle="Active Analysis" showSearch={true}>
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
           <div className="xl:col-span-8">

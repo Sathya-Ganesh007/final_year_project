@@ -124,7 +124,7 @@ export function RecentCrawls() {
                       </td>
                       <td className="py-4 md:py-6 px-6 md:px-10">
                         <span className="bg-neutral-100/80 text-neutral-500 px-3 md:px-4 py-1 md:py-1.5 rounded-lg md:rounded-xl text-[9px] md:text-[11px] font-black uppercase tracking-wider whitespace-nowrap">
-                          {crawl.mode || "Single"}
+                          {crawl.mode === "full" ? "Full Site Crawl" : "Single Page Crawl"}
                         </span>
                       </td>
                       <td className="py-4 md:py-6 px-6 md:px-10 text-center">
