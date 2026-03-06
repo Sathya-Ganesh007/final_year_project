@@ -82,6 +82,7 @@ export function HealthGauge() {
                     <circle cx={x} cy={y} r="8" fill="white" stroke="#f59e0b" strokeWidth="5" className="shadow-lg transition-all duration-1000 ease-out" />
                   );
                 })()}
+                
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-end pb-1 md:pb-2">
                 <span className="text-[10px] md:text-[11px] font-black text-neutral-300 uppercase tracking-[0.2em] leading-none mb-1">Risk Score</span>
@@ -97,7 +98,6 @@ export function HealthGauge() {
                 </div>
                 <span className="text-xs font-black text-red-600 font-mono tracking-tighter shrink-0">{stats?.criticalCount || 0}</span>
               </div>
-              
               <div className="flex items-center justify-between group cursor-default">
                 <div className="flex items-center gap-4">
                   <div className="h-2.5 w-2.5 rounded-full bg-amber-500 shadow-inner shrink-0" />
